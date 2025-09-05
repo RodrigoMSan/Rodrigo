@@ -2,66 +2,110 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
-  <title>Botão Fugitivo</title>
+  <title>Convite Especial</title>
   <style>
     body {
-      height: 100vh;
       margin: 0;
-      overflow: hidden;
+      background: url("fundo.png") center/cover no-repeat;
       display: flex;
-      align-items: center;
       justify-content: center;
-      background-color: #f0f0f0;
+      align-items: center;
+      height: 100vh;
+      font-family: Arial, sans-serif;
+    }
+    
+    .gift {
+      width: 300px;
+      height: 300px;
+      background: url('https://rodrigosantosm.my.canva.site/_assets/media/ffcd952d3d292e7de5b80a1d0e7c6b80.png') no-repeat center/contain;
+      cursor: pointer;
+      animation: bounce 1.5s infinite;
     }
 
-    #fugitivo {
-      position: absolute;
-      padding: 15px 30px;
-      font-size: 16px;
-      cursor: pointer;
-      background-color: #ff4d4d;
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-15px); }
+    }
+
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: url("https://rodrigosantosm.my.canva.site/_assets/media/90bb92a381881f97659779862c404662.png") center/cover no-repeat;
       color: white;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      text-align: center;
+      padding: 20px;
+      animation: fadeIn 1s;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    .modal h1 {
+      font-size: 2.5em;
+      margin-bottom: 20px;
+      text-shadow: 2px 2px 8px rgba(0,0,0,0.7);
+    }
+
+    .modal p {
+      font-size: 1.5em;
+      max-width: 700px;
+      line-height: 1.4;
+      text-shadow: 1px 1px 6px rgba(0,0,0,0.7);
+    }
+
+    .close {
+      margin-top: 40px;
+      background: #ff4081;
+      color: white;
+      padding: 15px 30px;
+      border-radius: 10px;
+      cursor: pointer;
       border: none;
-      border-radius: 5px;
-      transition: top 0.2s, left 0.2s;
+      font-size: 18px;
+      font-weight: bold;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.5);
     }
   </style>
 </head>
 <body>
 
-  <button id="fugitivo">Clique em mim!</button>
+  <!-- Presente animado -->
+  <div class="gift" id="gift"></div>
+
+  <!-- Modal em tela cheia -->
+  <div class="modal" id="modal">
+    <h1>🎤 Convite Especial 🎶</h1>
+    <p>Laura Rossetti, você está convidada para assistir ao show do <b>Luan Santana</b> no dia <b>27/09</b>! 🌹✨</p>
+    <button class="close" id="closeBtn">Fechar</button>
+  </div>
+
+  <!-- Música (arquivo local) -->
+  <audio id="music" src="chuva.mp3"></audio>
 
   <script>
-    const botao = document.getElementById('fugitivo');
+    const gift = document.getElementById("gift");
+    const modal = document.getElementById("modal");
+    const closeBtn = document.getElementById("closeBtn");
+    const music = document.getElementById("music");
 
-    document.addEventListener('mousemove', (e) => {
-      const mouseX = e.clientX;
-      const mouseY = e.clientY;
+    gift.addEventListener("click", () => {
+      modal.style.display = "flex";
+      music.play(); // toca a música
+    });
 
-      const botaoRect = botao.getBoundingClientRect();
-      const botaoX = botaoRect.left + botaoRect.width / 2;
-      const botaoY = botaoRect.top + botaoRect.height / 2;
-
-      const distancia = Math.hypot(mouseX - botaoX, mouseY - botaoY);
-
-      if (distancia < 100) {
-        const offsetX = (botaoX - mouseX) * 1.5;
-        const offsetY = (botaoY - mouseY) * 1.5;
-
-        let novoX = botao.offsetLeft + offsetX;
-        let novoY = botao.offsetTop + offsetY;
-
-        // Manter o botão dentro da janela
-        const maxX = window.innerWidth - botao.offsetWidth;
-        const maxY = window.innerHeight - botao.offsetHeight;
-
-        novoX = Math.max(0, Math.min(maxX, novoX));
-        novoY = Math.max(0, Math.min(maxY, novoY));
-
-        botao.style.left = `${novoX}px`;
-        botao.style.top = `${novoY}px`;
-      }
+    closeBtn.addEventListener("click", () => {
+      modal.style.display = "none";
+      music.pause(); // pausa a música
+      music.currentTime = 0; // volta ao início
     });
   </script>
+
 </body>
 </html>
